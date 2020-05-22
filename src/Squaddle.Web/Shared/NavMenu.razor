@@ -1,0 +1,45 @@
+﻿
+  <BSNavbar IsExpand="true" IsDark="true" Color="Color.Dark">
+    <BSNavbarBrand Href="javascript:void(0);">Squaddle</BSNavbarBrand>
+    <BSNavbarToggler @onclick="onclick" />
+    <BSCollapse isOpen="@IsOpen" IsNavbar="true" IsOpenChanged="OpenChanged">
+        <BSNav IsList="true" Class="mr-auto" IsNavbar="true">
+            <BSNavItem>
+                <BSNavLink Href="javascript:void(0);">Home</BSNavLink>
+            </BSNavItem>
+            <BSNavItem>
+                <BSNavLink Href="javascript:void(0);">About</BSNavLink>
+            </BSNavItem>
+            <BSNavItem>
+                <BSNavLink Href="javascript:void(0);">Create a Room</BSNavLink>
+            </BSNavItem>
+            <BSNavItem>
+                <BSNavLink Href="javascript:void(0);">Join a Room</BSNavLink>
+            </BSNavItem>
+        </BSNav>
+    </BSCollapse>
+</BSNavbar>
+
+@code {
+    bool IsOpen { get; set; } = true;
+    void onclick(MouseEventArgs e)
+    {
+        IsOpen = !IsOpen;
+        StateHasChanged();
+        Console.WriteLine("Navbar Class->" + IsOpen.ToString());
+    }
+    void OpenChanged(bool e)
+    {
+        IsOpen = e;
+        StateHasChanged();
+        Console.WriteLine("OpenChanged->" + IsOpen.ToString());
+    }
+
+    bool IsOpen2 { get; set; } = true;
+    void onclick2(MouseEventArgs e)
+    {
+        IsOpen2 = !IsOpen2;
+        StateHasChanged();
+
+    }
+}

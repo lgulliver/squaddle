@@ -1,0 +1,28 @@
+﻿@page "/"
+
+<BSContainer>
+    <BSRow>
+        <BSCol MD=2></BSCol>
+        <BSCol MD=4>
+            <BSCard Color="Color.Light">
+                <BSCard CardType="CardType.Header">Create a room</BSCard>
+                <BSCard CardType="CardType.Body">
+                    <BSCard CardType="CardType.Title">Create a new room</BSCard>
+                    <BSCard CardType="CardType.Text">Create a new Squaddle room - Estimation, Retrospective or Healthcheck</BSCard>
+                </BSCard>
+            </BSCard>
+        </BSCol>
+        <BSCol MD=4>
+            <BSCard Color="Color.Light">
+                <BSCard CardType="CardType.Header">Join a room</BSCard>
+                <BSCard CardType="CardType.Body">
+                    <BSCard CardType="CardType.Title">Join an existing room</BSCard>
+                    <BSCard CardType="CardType.Text">
+                        <BSBasicInput InputType="InputType.Text" PlaceHolder="Room code" Value="string.Empty" Id="roomCode"/>
+                    </BSCard>
+                </BSCard>
+            </BSCard>
+        </BSCol>
+        <BSCol MD=2></BSCol>
+    </BSRow>
+</BSContainer>
