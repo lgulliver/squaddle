@@ -1,0 +1,10 @@
+﻿﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+
+.navbar-brand {
+    font-size: 1.2em;
+    font-family: 'Pacifico', cursive;
+}
+
+.brandfont {
+    font-family: 'Pacifico', cursive;
+}
