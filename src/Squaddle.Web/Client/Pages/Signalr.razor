@@ -35,10 +35,10 @@
     protected override async Task OnInitializedAsync()
     {
         hubConnection = new HubConnectionBuilder()
-            .WithUrl(NavigationManager.ToAbsoluteUri("/chatHub"))
+            .WithUrl("http://localhost:7071/api")
             .Build();
 
-        hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
+        hubConnection.On<string, string>("messages", (user, message) =>
         {
             var encodedMsg = $"{user}: {message}";
             messages.Add(encodedMsg);
@@ -49,7 +49,7 @@
     }
 
     Task Send() =>
-        hubConnection.SendAsync("SendMessage", userInput, messageInput);
+        hubConnection.SendAsync("messages", userInput, messageInput);
 
     public bool IsConnected =>
         hubConnection.State == HubConnectionState.Connected;
