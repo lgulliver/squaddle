@@ -1,5 +1,7 @@
 ﻿@page "/"
 
+@inject NavigationManager NavigationManager
+
 <BSContainer>
     <BSRow>
         <BSCol MD=12>
@@ -20,7 +22,7 @@
                     <BSCard CardType="CardType.Text">
                         Create a new Squaddle room and invite your team to an estimation, retrospective or healthcheck
                         <p>&nbsp;</p>
-                        <BSButton Color="Color.Primary" IsBlock="true">Get started</BSButton>
+                        <BSButton Color="Color.Primary" IsBlock="true" @onclick="NavigateToGettingStarted">Get started</BSButton>
                     </BSCard>
                 </BSCard>
             </BSCard>
@@ -41,3 +43,9 @@
         <BSCol MD=2></BSCol>
     </BSRow>
 </BSContainer>
+
+@code {
+    public void NavigateToGettingStarted() {
+        NavigationManager.NavigateTo("get-started");
+    }
+}
