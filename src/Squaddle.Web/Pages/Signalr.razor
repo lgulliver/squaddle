@@ -3,6 +3,8 @@
 @using Microsoft.AspNetCore.SignalR.Client
 @inject NavigationManager NavigationManager
 
+<h1>@hubConnection.State</h1>
+
 <div class="form-group">
     <label>
         User:
@@ -15,42 +17,57 @@
         <input @bind="messageInput" size="50" />
     </label>
 </div>
-<button @onclick="Send" disabled="@(!IsConnected)">Send</button>
+<button @onclick="SendAsync" disabled="@(!IsConnected)">Send</button>
 
 <hr>
 
 <ul id="messagesList">
     @foreach (var message in messages)
     {
-        <li>@message</li>
+        <li>@message.Name: @message.Message</li>
     }
 </ul>
 
 @code {
     private HubConnection hubConnection;
-    private List<string> messages = new List<string>();
+    private List<ClientMessage> messages = new List<ClientMessage>();
     private string userInput;
     private string messageInput;
 
     protected override async Task OnInitializedAsync()
     {
         hubConnection = new HubConnectionBuilder()
-            .WithUrl("http://localhost:7071/api")
+            .WithUrl("http://localhost:7071/api/")
             .Build();
 
-        hubConnection.On<string, string>("messages", (user, message) =>
+        hubConnection.On<ClientMessage>("messages", (clientMessage) =>
         {
-            var encodedMsg = $"{user}: {message}";
-            messages.Add(encodedMsg);
+            messages.Add(clientMessage);
             StateHasChanged();
         });
 
         await hubConnection.StartAsync();
     }
 
-    Task Send() =>
-        hubConnection.SendAsync("messages", userInput, messageInput);
+    async Task SendAsync() {
+
+        var msg = new ClientMessage
+        {
+            Name = userInput,
+            Message = messageInput
+        };
+
+        await hubConnection.SendAsync("messages", msg);
+        messageInput = string.Empty;
+        StateHasChanged();
+    }
 
     public bool IsConnected =>
         hubConnection.State == HubConnectionState.Connected;
+
+    public class ClientMessage
+    {
+        public string Name { get; set; }
+        public string Message { get; set; }
+    }
 }

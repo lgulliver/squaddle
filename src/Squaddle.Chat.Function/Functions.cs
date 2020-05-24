@@ -16,22 +16,28 @@ namespace Squaddle.Chat.Function
         [FunctionName("negotiate")]
         public static SignalRConnectionInfo GetSignalRInfo(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequest req,
-            [SignalRConnectionInfo(HubName = "chat")] SignalRConnectionInfo connectionInfo)
+            [SignalRConnectionInfo(HubName = "chatHub")] SignalRConnectionInfo connectionInfo)
         {
             return connectionInfo;
         }
 
         [FunctionName("messages")]
         public static Task SendMessage(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post")] object message,
-            [SignalR(HubName = "chat")] IAsyncCollector<SignalRMessage> signalRMessages)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post")] ClientMessage clientMessage,
+            [SignalR(HubName = "chatHub")] IAsyncCollector<SignalRMessage> signalRMessages)
         {
             return signalRMessages.AddAsync(
                 new SignalRMessage
                 {
-                    Target = "newMessage",
-                    Arguments = new[] { message }
+                    Target = "clientMessage",
+                    Arguments = new[] { clientMessage }
                 });
         }
+    }
+
+    public class ClientMessage
+    {
+        public string Name { get; set; }
+        public string Message { get; set; }
     }
 }

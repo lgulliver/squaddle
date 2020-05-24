@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using BlazorStrap;
 
-namespace Squaddle.Web.Client
+namespace Squaddle.Web
 {
     public class Program
     {

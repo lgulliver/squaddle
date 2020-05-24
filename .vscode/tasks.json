@@ -8,7 +8,7 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/src/Squaddle.Web/Client/Squaddle.Web.Client.csproj",
+                "${workspaceFolder}/src/Squaddle.Web/Squaddle.Web.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
