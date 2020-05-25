@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace Squaddle.Chat.Function
+namespace Squaddle.Functions.Chat
 {
     public static class Functions
     {
@@ -32,6 +32,25 @@ namespace Squaddle.Chat.Function
                     Target = "clientMessage",
                     Arguments = new[] { clientMessage }
                 });
+        }
+
+        [FunctionName("create-room")]
+        public static string RunCreateRoom(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req
+        )
+        {
+            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            var stringChars = new char[8];
+            var random = new Random();
+
+            for (int i = 0; i < stringChars.Length; i++)
+            {
+                stringChars[i] = chars[random.Next(chars.Length)];
+            }
+
+            var finalString = new String(stringChars);
+
+            return finalString;
         }
     }
 

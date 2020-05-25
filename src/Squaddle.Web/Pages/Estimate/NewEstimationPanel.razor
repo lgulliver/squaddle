@@ -1,0 +1,41 @@
+@inject Blazored.SessionStorage.ISyncSessionStorageService sessionStorage
+
+<BSCard Color="Color.Light">
+    <BSCard CardType="CardType.Header">Estimation</BSCard>
+    <BSCard CardType="CardType.Body">
+        <BSCard CardType="CardType.Title">Start estimating</BSCard>
+        <BSCard CardType="CardType.Text">
+            Planning poker is a way for agile teams to guide sprint planning and build accurate consensus estimates.
+            <p>&nbsp;</p>
+            <BSButton Color="Color.Primary" IsBlock="true" @onclick="ToggleNewEstimationSessionModal">Go</BSButton>
+        </BSCard>
+    </BSCard>
+</BSCard>
+
+<BSModal @ref="NewEstimationSession" IsCentered="true">
+    <BSModalHeader OnClick="@ToggleNewEstimationSessionModal">Start a new estimation session</BSModalHeader>
+    <BSModalBody><h2>@RoomCode</h2></BSModalBody>
+    <BSModalFooter>
+        <BSButton Color="Color.Secondary" @onclick="@ToggleNewEstimationSessionModal">Close</BSButton>
+        <BSButton Color="Color.Primary" @onclick="@CreateNewEstimationSession">Start</BSButton>
+    </BSModalFooter>
+</BSModal>
+
+@code {
+    private string RoomCode;
+    private readonly HttpClient _httpClient = new HttpClient();
+    private readonly string functionAppBaseUri = "http://localhost:7071/api/";
+
+    BSModal NewEstimationSession;
+
+    void ToggleNewEstimationSessionModal(MouseEventArgs e)
+    {
+        NewEstimationSession.Toggle();
+    }
+
+    async Task CreateNewEstimationSession() {
+        var newRoomCode = await _httpClient.GetStringAsync($"{functionAppBaseUri}create-room");
+        RoomCode = newRoomCode;
+        StateHasChanged();
+    }
+}
