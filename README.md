@@ -1,5 +1,15 @@
-# squaddle
+# Squaddle
+
 A swiss army knife of tools for squads for planning, retros and squad health
+
+# Status
+
+## Builds
+
+| Component | Status of CI Build (`master`) |
+| ---- | ---- |
+| Squaddle.Web | ![Squaddle.Web-CI](https://github.com/lgulliver/squaddle/workflows/Squaddle.Web-CI/badge.svg?branch=master) |
+| Squaddle.Functions.Chat | ![Squaddle.Functions.Chat-CI](https://github.com/lgulliver/squaddle/workflows/Squaddle.Functions.Chat-CI/badge.svg) |
 
 # Goals
 
