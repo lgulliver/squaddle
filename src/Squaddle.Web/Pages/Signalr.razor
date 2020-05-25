@@ -33,14 +33,16 @@
     private List<ClientMessage> messages = new List<ClientMessage>();
     private string userInput;
     private string messageInput;
+    private readonly HttpClient _httpClient = new HttpClient();
 
+    private readonly string functionAppBaseUri = "http://localhost:7071/api/";
     protected override async Task OnInitializedAsync()
     {
         hubConnection = new HubConnectionBuilder()
-            .WithUrl("http://localhost:7071/api/")
+            .WithUrl(functionAppBaseUri)
             .Build();
 
-        hubConnection.On<ClientMessage>("messages", (clientMessage) =>
+        hubConnection.On<ClientMessage>("clientMessage", (clientMessage) =>
         {
             messages.Add(clientMessage);
             StateHasChanged();
@@ -57,7 +59,8 @@
             Message = messageInput
         };
 
-        await hubConnection.SendAsync("messages", msg);
+        //await hubConnection.SendAsync("messages", msg);
+        await _httpClient.PostAsJsonAsync($"{functionAppBaseUri}messages", msg);
         messageInput = string.Empty;
         StateHasChanged();
     }
