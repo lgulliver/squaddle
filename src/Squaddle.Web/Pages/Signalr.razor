@@ -59,7 +59,6 @@
             Message = messageInput
         };
 
-        //await hubConnection.SendAsync("messages", msg);
         await _httpClient.PostAsJsonAsync($"{functionAppBaseUri}messages", msg);
         messageInput = string.Empty;
         StateHasChanged();
