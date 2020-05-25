@@ -1,2 +1,2 @@
 # squaddle
-An multi-tool for squads
+A swiss army knife of tools for squads for planning, retros and squad health
