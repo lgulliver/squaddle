@@ -25,7 +25,7 @@
             "type": "process",
             "problemMatcher": "$msCompile",
             "options": {
-                "cwd": "${workspaceFolder}/src\\Squaddle.Chat.Function"
+                "cwd": "${workspaceFolder}/src/Squaddle.Functions.Chat"
             }
         },
         {
@@ -44,7 +44,7 @@
             },
             "problemMatcher": "$msCompile",
             "options": {
-                "cwd": "${workspaceFolder}/src\\Squaddle.Chat.Function"
+                "cwd": "${workspaceFolder}/src/Squaddle.Functions.Chat"
             }
         },
         {
@@ -60,7 +60,7 @@
             "type": "process",
             "problemMatcher": "$msCompile",
             "options": {
-                "cwd": "${workspaceFolder}/src\\Squaddle.Chat.Function"
+                "cwd": "${workspaceFolder}/src/Squaddle.Functions.Chat"
             }
         },
         {
@@ -77,14 +77,14 @@
             "dependsOn": "clean release",
             "problemMatcher": "$msCompile",
             "options": {
-                "cwd": "${workspaceFolder}/src\\Squaddle.Chat.Function"
+                "cwd": "${workspaceFolder}/src/Squaddle.Functions.Chat"
             }
         },
         {
             "type": "func",
             "dependsOn": "build",
             "options": {
-                "cwd": "${workspaceFolder}/src\\Squaddle.Chat.Function/bin/Debug/netcoreapp2.1"
+                "cwd": "${workspaceFolder}/src/Squaddle.Functions.Chat/bin/Debug/netcoreapp2.1"
             },
             "command": "host start",
             "isBackground": true,
