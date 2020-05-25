@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Squaddle.Chat.Function", "Squaddle.Chat.Function\Squaddle.Chat.Function.csproj", "{9B97CFEC-64C3-4F4E-98EB-313083663C11}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Squaddle.Web", "Squaddle.Web\Squaddle.Web.csproj", "{A4DAE138-A307-4703-BB7D-5C8B1FA72947}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Squaddle.Functions.Chat", "Squaddle.Functions.Chat\Squaddle.Functions.Chat.csproj", "{7EAEE16D-176E-4BFB-B4D0-CBFC143F97D8}"
@@ -22,18 +20,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9B97CFEC-64C3-4F4E-98EB-313083663C11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9B97CFEC-64C3-4F4E-98EB-313083663C11}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9B97CFEC-64C3-4F4E-98EB-313083663C11}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{9B97CFEC-64C3-4F4E-98EB-313083663C11}.Debug|x64.Build.0 = Debug|Any CPU
-		{9B97CFEC-64C3-4F4E-98EB-313083663C11}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{9B97CFEC-64C3-4F4E-98EB-313083663C11}.Debug|x86.Build.0 = Debug|Any CPU
-		{9B97CFEC-64C3-4F4E-98EB-313083663C11}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9B97CFEC-64C3-4F4E-98EB-313083663C11}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9B97CFEC-64C3-4F4E-98EB-313083663C11}.Release|x64.ActiveCfg = Release|Any CPU
-		{9B97CFEC-64C3-4F4E-98EB-313083663C11}.Release|x64.Build.0 = Release|Any CPU
-		{9B97CFEC-64C3-4F4E-98EB-313083663C11}.Release|x86.ActiveCfg = Release|Any CPU
-		{9B97CFEC-64C3-4F4E-98EB-313083663C11}.Release|x86.Build.0 = Release|Any CPU
 		{A4DAE138-A307-4703-BB7D-5C8B1FA72947}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A4DAE138-A307-4703-BB7D-5C8B1FA72947}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4DAE138-A307-4703-BB7D-5C8B1FA72947}.Debug|x64.ActiveCfg = Debug|Any CPU
