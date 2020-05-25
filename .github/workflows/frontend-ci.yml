@@ -3,8 +3,12 @@ name: Squaddle.Web-CI
 on:
   push:
     branches: [ master ]
+    paths:
+    - 'src/Squaddle.Web/**'
   pull_request:
     branches: [ master ]
+    paths:
+    - 'src/Squaddle.Web/**'
 
 jobs:
   build:
@@ -18,6 +22,6 @@ jobs:
       with:
         dotnet-version: 3.1.300
     - name: Install dependencies
-      run: dotnet restore /src/Squaddle.Web/Squaddle.Web.csproj
+      run: dotnet restore src/Squaddle.Web/
     - name: Build
       run: dotnet build src/Squaddle.Web/Squaddle.Web.csproj --configuration Release --no-restore
