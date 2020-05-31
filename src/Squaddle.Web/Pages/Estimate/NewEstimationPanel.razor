@@ -1,3 +1,5 @@
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
 @inject Blazored.SessionStorage.ISyncSessionStorageService sessionStorage
 
 <BSCard Color="Color.Light">
@@ -14,7 +16,10 @@
 
 <BSModal @ref="NewEstimationSession" IsCentered="true">
     <BSModalHeader OnClick="@ToggleNewEstimationSessionModal">Start a new estimation session</BSModalHeader>
-    <BSModalBody><h2>@RoomCode</h2></BSModalBody>
+    <BSModalBody>
+
+        <h2>@RoomCode</h2>
+    </BSModalBody>
     <BSModalFooter>
         <BSButton Color="Color.Secondary" @onclick="@ToggleNewEstimationSessionModal">Close</BSButton>
         <BSButton Color="Color.Primary" @onclick="@CreateNewEstimationSession">Start</BSButton>
@@ -24,7 +29,6 @@
 @code {
     private string RoomCode;
     private readonly HttpClient _httpClient = new HttpClient();
-    private readonly string functionAppBaseUri = "http://localhost:7071/api/";
 
     BSModal NewEstimationSession;
 
@@ -34,7 +38,8 @@
     }
 
     async Task CreateNewEstimationSession() {
-        var newRoomCode = await _httpClient.GetStringAsync($"{functionAppBaseUri}create-room");
+        string apiUrl = Configuration["apiBaseUrl"];
+        string newRoomCode = await _httpClient.GetStringAsync($"{apiUrl}create-room");
         RoomCode = newRoomCode;
         StateHasChanged();
     }

@@ -1,0 +1,32 @@
+{
+    "$schema": "http://json.schemastore.org/proxies",
+    "proxies": {
+      "chatNegotiate": {
+        "matchCondition": {
+          "route": "/api/chat/negotiate",
+          "methods": [
+            "POST" 
+          ]
+        },
+        "backendUri": "%chat_api%/api/BeginNegotiate"
+      },
+      "chatMessages": {
+        "matchCondition": {
+          "route": "/api/chat/messages",
+          "methods": [
+            "POST"
+          ]
+        },
+        "backendUri": "%chat_api%/api/PostMessage"
+      },
+      "createRoom": {
+        "matchCondition": {
+          "route": "/api/createroom",
+          "methods": [
+            "GET"
+          ]
+        },
+        "backendUri": "%session_api%/api/CreateRoom"
+      }
+    }
+}

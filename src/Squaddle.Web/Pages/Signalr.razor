@@ -1,7 +1,10 @@
 @page "/signalr"
 
+@using Microsoft.Extensions.Configuration
 @using Microsoft.AspNetCore.SignalR.Client
 @inject NavigationManager NavigationManager
+@inject IConfiguration Configuration
+@inject IHttpClientFactory ClientFactory
 
 <h1>@hubConnection.State</h1>
 
@@ -35,11 +38,10 @@
     private string messageInput;
     private readonly HttpClient _httpClient = new HttpClient();
 
-    private readonly string functionAppBaseUri = "http://localhost:7071/api/";
     protected override async Task OnInitializedAsync()
     {
         hubConnection = new HubConnectionBuilder()
-            .WithUrl(functionAppBaseUri)
+            .WithUrl(Configuration["chatApiBaseUrl"])
             .Build();
 
         hubConnection.On<ClientMessage>("clientMessage", (clientMessage) =>
@@ -59,7 +61,8 @@
             Message = messageInput
         };
 
-        await _httpClient.PostAsJsonAsync($"{functionAppBaseUri}messages", msg);
+        var client = ClientFactory.CreateClient("ChatApi");
+        await client.PostAsJsonAsync("messages", msg);
         messageInput = string.Empty;
         StateHasChanged();
     }
