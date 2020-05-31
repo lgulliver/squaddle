@@ -1,6 +1,8 @@
 @using Microsoft.Extensions.Configuration
+@using Squaddle.Shared.Models;
 @inject IConfiguration Configuration
 @inject Blazored.SessionStorage.ISyncSessionStorageService sessionStorage
+@inject NavigationManager NavigationManager
 
 <BSCard Color="Color.Light">
     <BSCard CardType="CardType.Header">Estimation</BSCard>
@@ -14,33 +16,87 @@
     </BSCard>
 </BSCard>
 
-<BSModal @ref="NewEstimationSession" IsCentered="true">
-    <BSModalHeader OnClick="@ToggleNewEstimationSessionModal">Start a new estimation session</BSModalHeader>
-    <BSModalBody>
+<BSModal @ref="newEstimationSession" IsCentered="true">
+    <BSForm Model="@estimationSessionUser" OnValidSubmit="@CreateNewEstimationSession" @ref="newEstimationSessionForm">
+        <BSModalHeader OnClick="@ToggleNewEstimationSessionModal">Start a new estimation session</BSModalHeader>
+        <BSModalBody>
+            
+            <DataAnnotationsValidator />
+            <ValidationSummary />
 
-        <h2>@RoomCode</h2>
-    </BSModalBody>
-    <BSModalFooter>
-        <BSButton Color="Color.Secondary" @onclick="@ToggleNewEstimationSessionModal">Close</BSButton>
-        <BSButton Color="Color.Primary" @onclick="@CreateNewEstimationSession">Start</BSButton>
-    </BSModalFooter>
+            <BSFormGroup>
+                <BSLabel For="estimationUserName">Name</BSLabel>
+                <BSInput Id="estimationUserName" InputType="InputType.Text" PlaceHolder="Your name" @bind-Value="estimationSessionUser.Name" ValidateOnChange="true" />
+            </BSFormGroup>
+
+        </BSModalBody>
+        <BSModalFooter>
+            <BSButton Color="Color.Secondary" @onclick="@ToggleNewEstimationSessionModal">Close</BSButton>
+            <BSButton Color="Color.Primary" ButtonType="ButtonType.Submit">Start</BSButton>
+        </BSModalFooter>
+    </BSForm>
+</BSModal>
+
+<BSModal @ref="newEstimationSessionSuccess" IsCentered="true">   
+        <BSModalHeader OnClick="@ToggleNewEstimationSessionSuccessModal">Session Created</BSModalHeader>
+        <BSModalBody>
+            <p>Share the below link to invite your team</p>
+            <p>@roomJoinUrl</p>
+        </BSModalBody>
+        <BSModalFooter>
+            <BSButton Color="Color.Secondary" @onclick="@ToggleNewEstimationSessionSuccessModal">Close</BSButton>
+            <BSButton Color="Color.Primary" @onclick="@JoinSession">Continue</BSButton>
+        </BSModalFooter>    
 </BSModal>
 
 @code {
-    private string RoomCode;
     private readonly HttpClient _httpClient = new HttpClient();
+    private EstimationRoomUser estimationSessionUser = new EstimationRoomUser();
+    private string roomJoinUrl = string.Empty;
 
-    BSModal NewEstimationSession;
+    BSModal newEstimationSession;
+    BSModal newEstimationSessionSuccess;
+    BSForm newEstimationSessionForm;
+
+    protected override void OnInitialized()
+    {
+        estimationSessionUser.IsRoomOwner = true;
+        estimationSessionUser.RoomCode = "ROOMCODE";
+    }
 
     void ToggleNewEstimationSessionModal(MouseEventArgs e)
     {
-        NewEstimationSession.Toggle();
+        newEstimationSession.Toggle();
     }
 
-    async Task CreateNewEstimationSession() {
+    void ToggleNewEstimationSessionSuccessModal(MouseEventArgs e)
+    {
+        newEstimationSessionSuccess.Toggle();
+    }
+
+    async Task CreateNewEstimationSession()
+    {
         string apiUrl = Configuration["apiBaseUrl"];
         string newRoomCode = await _httpClient.GetStringAsync($"{apiUrl}create-room");
-        RoomCode = newRoomCode;
+
+        estimationSessionUser.RoomCode = newRoomCode;
+        estimationSessionUser.IsRoomOwner = true;
+
+        sessionStorage.SetItem("Name", estimationSessionUser.Name);
+        sessionStorage.SetItem("RoomCode", estimationSessionUser.RoomCode);
+        sessionStorage.SetItem("IsRoomOwner", estimationSessionUser.IsRoomOwner);
+        sessionStorage.SetItem("EstimationStyleType", estimationSessionUser.EstimationStyleType);
+
+        roomJoinUrl = $"{NavigationManager.BaseUri}join/{estimationSessionUser.RoomCode}";
+
         StateHasChanged();
+
+        newEstimationSession.Toggle();
+        newEstimationSessionSuccess.Toggle();
+    }
+
+    void JoinSession(MouseEventArgs e)
+    {
+        NavigationManager.NavigateTo(roomJoinUrl);
     }
 }

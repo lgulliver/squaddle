@@ -16,4 +16,8 @@
     <PackageReference Include="System.Net.Http.Json" Version="3.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Squaddle.Shared\Squaddle.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
