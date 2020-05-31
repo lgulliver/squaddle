@@ -33,25 +33,6 @@ namespace Squaddle.Functions.Chat
                     Arguments = new[] { clientMessage }
                 });
         }
-
-        [FunctionName("CreateRoom")]
-        public static string RunCreateRoom(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req
-        )
-        {
-            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            var stringChars = new char[8];
-            var random = new Random();
-
-            for (int i = 0; i < stringChars.Length; i++)
-            {
-                stringChars[i] = chars[random.Next(chars.Length)];
-            }
-
-            var finalString = new String(stringChars);
-
-            return finalString;
-        }
     }
 
     public class ClientMessage

@@ -21,7 +21,7 @@
       },
       "createRoom": {
         "matchCondition": {
-          "route": "/api/createroom",
+          "route": "/api/create-room",
           "methods": [
             "GET"
           ]
