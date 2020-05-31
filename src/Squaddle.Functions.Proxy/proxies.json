@@ -5,7 +5,7 @@
         "matchCondition": {
           "route": "/api/chat/negotiate",
           "methods": [
-            "POST"
+            "POST" 
           ]
         },
         "backendUri": "%chat_api%/api/BeginNegotiate"
@@ -21,7 +21,7 @@
       },
       "createRoom": {
         "matchCondition": {
-          "route": "/api/create-room",
+          "route": "/api/createroom",
           "methods": [
             "GET"
           ]
