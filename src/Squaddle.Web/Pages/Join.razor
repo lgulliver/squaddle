@@ -1,0 +1,54 @@
+﻿@page "/join"
+@page "/join/{roomcode}"
+
+@inject Blazored.SessionStorage.ISyncSessionStorageService sessionStorage
+@inject NavigationManager NavigationManager
+
+<h3>Join session in progress</h3>
+
+@code {
+    [Parameter]
+    public string RoomCode { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Console.WriteLine($"Room Code: {RoomCode}");
+
+        if (string.IsNullOrEmpty(RoomCode))
+        {
+            Console.WriteLine("No Room Code found in URL. Checking local storage.");
+            RoomCode = sessionStorage.GetItem<string>("User_RoomCode");
+
+            if(string.IsNullOrEmpty(RoomCode))
+            {
+                Console.WriteLine("No Room Code found in local storage. Aborting join.");
+                NavigationManager.NavigateTo(NavigationManager.BaseUri);
+            }
+
+            Console.WriteLine($"Room Code found in local storage: {RoomCode}");
+
+            JoinRoom(RoomCode);
+        }
+
+        if (RoomCode.Length < 8 || RoomCode.Length > 8)
+        {
+            Console.WriteLine($"Room Code {RoomCode} is too long and invalid.");
+            NavigationManager.NavigateTo("/404");
+        }
+
+        if (!System.Text.RegularExpressions.Regex.IsMatch(RoomCode, @"^[a-zA-Z0-9]+$"))
+        {
+            Console.WriteLine($"Room Code {RoomCode} is invalid.");
+            NavigationManager.NavigateTo("/404");
+        }
+
+        Console.WriteLine($"Room Code: {RoomCode} is valid. Joining session...");
+        JoinRoom(RoomCode);
+    }
+
+    void JoinRoom(string roomCode)
+    {
+        sessionStorage.SetItem("User_RoomCode", roomCode);
+        NavigationManager.NavigateTo($"{NavigationManager.BaseUri}room");
+    }
+}

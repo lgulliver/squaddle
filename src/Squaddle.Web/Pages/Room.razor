@@ -1,0 +1,14 @@
+﻿@page "/room"
+
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
+
+<h3>Room: @RoomCode</h3>
+
+@code {
+    private string RoomCode;
+
+    protected override async Task OnInitializedAsync()
+    {
+        RoomCode = await sessionStorage.GetItemAsync<string>("User_RoomCode");
+    }
+}

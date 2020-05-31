@@ -1,7 +1,9 @@
 @using Microsoft.Extensions.Configuration
 @using Squaddle.Shared.Models;
+@using Squaddle.Web.ViewModels;
+ 
 @inject IConfiguration Configuration
-@inject Blazored.SessionStorage.ISyncSessionStorageService sessionStorage
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
 @inject NavigationManager NavigationManager
 
 <BSCard Color="Color.Light">
@@ -17,16 +19,21 @@
 </BSCard>
 
 <BSModal @ref="newEstimationSession" IsCentered="true">
-    <BSForm Model="@estimationSessionUser" OnValidSubmit="@CreateNewEstimationSession" @ref="newEstimationSessionForm">
+    <BSForm Model="@newEstimationSessionViewModel" OnValidSubmit="@CreateNewEstimationSession" @ref="newEstimationSessionForm">
         <BSModalHeader OnClick="@ToggleNewEstimationSessionModal">Start a new estimation session</BSModalHeader>
         <BSModalBody>
-            
+
             <DataAnnotationsValidator />
             <ValidationSummary />
 
             <BSFormGroup>
-                <BSLabel For="estimationUserName">Name</BSLabel>
-                <BSInput Id="estimationUserName" InputType="InputType.Text" PlaceHolder="Your name" @bind-Value="estimationSessionUser.Name" ValidateOnChange="true" />
+                <BSLabel For="estimationUserName">Your Name</BSLabel>
+                <BSInput Id="estimationUserName" InputType="InputType.Text" PlaceHolder="Your name" @bind-Value="newEstimationSessionViewModel.RoomCreator.Name" ValidateOnChange="true" />
+            </BSFormGroup>
+
+            <BSFormGroup>
+                <BSLabel For="esitmationRoomName">Room Name</BSLabel>
+                <BSInput Id="esitmationRoomName" InputType="InputType.Text" PlaceHolder="Room name (e.g. Guardians of the Galaxy's Room)" @bind-Value="newEstimationSessionViewModel.Room.Name" ValidateOnChange="true" />
             </BSFormGroup>
 
         </BSModalBody>
@@ -38,7 +45,7 @@
 </BSModal>
 
 <BSModal @ref="newEstimationSessionSuccess" IsCentered="true">   
-        <BSModalHeader OnClick="@ToggleNewEstimationSessionSuccessModal">Session Created</BSModalHeader>
+        <BSModalHeader OnClick="@ToggleNewEstimationSessionSuccessModal">Session created</BSModalHeader>
         <BSModalBody>
             <p>Share the below link to invite your team</p>
             <p>@roomJoinUrl</p>
@@ -51,7 +58,7 @@
 
 @code {
     private readonly HttpClient _httpClient = new HttpClient();
-    private EstimationRoomUser estimationSessionUser = new EstimationRoomUser();
+    private NewEstimationSessionViewModel newEstimationSessionViewModel = new NewEstimationSessionViewModel();
     private string roomJoinUrl = string.Empty;
 
     BSModal newEstimationSession;
@@ -60,8 +67,8 @@
 
     protected override void OnInitialized()
     {
-        estimationSessionUser.IsRoomOwner = true;
-        estimationSessionUser.RoomCode = "ROOMCODE";
+        newEstimationSessionViewModel.RoomCreator.IsRoomOwner = true;
+        newEstimationSessionViewModel.RoomCreator.RoomCode = "ROOMCODE";
     }
 
     void ToggleNewEstimationSessionModal(MouseEventArgs e)
@@ -77,17 +84,19 @@
     async Task CreateNewEstimationSession()
     {
         string apiUrl = Configuration["apiBaseUrl"];
-        string newRoomCode = await _httpClient.GetStringAsync($"{apiUrl}create-room");
+        string newRoomCode = await _httpClient.GetStringAsync($"{apiUrl}create-room");        
 
-        estimationSessionUser.RoomCode = newRoomCode;
-        estimationSessionUser.IsRoomOwner = true;
+        newEstimationSessionViewModel.RoomCreator.RoomCode = newRoomCode;
+        newEstimationSessionViewModel.RoomCreator.IsRoomOwner = true;
 
-        sessionStorage.SetItem("Name", estimationSessionUser.Name);
-        sessionStorage.SetItem("RoomCode", estimationSessionUser.RoomCode);
-        sessionStorage.SetItem("IsRoomOwner", estimationSessionUser.IsRoomOwner);
-        sessionStorage.SetItem("EstimationStyleType", estimationSessionUser.EstimationStyleType);
+        await sessionStorage.SetItemAsync("User_Name", newEstimationSessionViewModel.RoomCreator.Name);
+        await sessionStorage.SetItemAsync("User_RoomCode", newEstimationSessionViewModel.RoomCreator.RoomCode);
+        await sessionStorage.SetItemAsync("User_IsRoomOwner", newEstimationSessionViewModel.RoomCreator.IsRoomOwner);
 
-        roomJoinUrl = $"{NavigationManager.BaseUri}join/{estimationSessionUser.RoomCode}";
+        await sessionStorage.SetItemAsync("Room_RoomType", newEstimationSessionViewModel.Room.RoomType);
+        await sessionStorage.SetItemAsync("Room_EstimationStyleType", newEstimationSessionViewModel.Room.EstimationStyleType);
+
+        roomJoinUrl = $"{NavigationManager.BaseUri}join/{newEstimationSessionViewModel.RoomCreator.RoomCode}";
 
         StateHasChanged();
 
