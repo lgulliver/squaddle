@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Squaddle.Web", "Squaddle.We
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Squaddle.Functions.Chat", "Squaddle.Functions.Chat\Squaddle.Functions.Chat.csproj", "{7EAEE16D-176E-4BFB-B4D0-CBFC143F97D8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Squaddle.Functions.Proxy", "Squaddle.Functions.Proxy\Squaddle.Functions.Proxy.csproj", "{32C89206-C27D-4F53-90F7-154588143FBB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,5 +46,17 @@ Global
 		{7EAEE16D-176E-4BFB-B4D0-CBFC143F97D8}.Release|x64.Build.0 = Release|Any CPU
 		{7EAEE16D-176E-4BFB-B4D0-CBFC143F97D8}.Release|x86.ActiveCfg = Release|Any CPU
 		{7EAEE16D-176E-4BFB-B4D0-CBFC143F97D8}.Release|x86.Build.0 = Release|Any CPU
+		{32C89206-C27D-4F53-90F7-154588143FBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32C89206-C27D-4F53-90F7-154588143FBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32C89206-C27D-4F53-90F7-154588143FBB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{32C89206-C27D-4F53-90F7-154588143FBB}.Debug|x64.Build.0 = Debug|Any CPU
+		{32C89206-C27D-4F53-90F7-154588143FBB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{32C89206-C27D-4F53-90F7-154588143FBB}.Debug|x86.Build.0 = Debug|Any CPU
+		{32C89206-C27D-4F53-90F7-154588143FBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32C89206-C27D-4F53-90F7-154588143FBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32C89206-C27D-4F53-90F7-154588143FBB}.Release|x64.ActiveCfg = Release|Any CPU
+		{32C89206-C27D-4F53-90F7-154588143FBB}.Release|x64.Build.0 = Release|Any CPU
+		{32C89206-C27D-4F53-90F7-154588143FBB}.Release|x86.ActiveCfg = Release|Any CPU
+		{32C89206-C27D-4F53-90F7-154588143FBB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

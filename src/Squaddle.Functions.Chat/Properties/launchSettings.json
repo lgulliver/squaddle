@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Squaddle.Functions.Chat": {
+      "commandName": "Project",
+      "commandLineArgs": "host start --port 7072  --cors * --pause-on-error"
+    }
+  }
+}

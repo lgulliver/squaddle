@@ -13,7 +13,7 @@ namespace Squaddle.Functions.Chat
 {
     public static class Functions
     {
-        [FunctionName("negotiate")]
+        [FunctionName("BeginNegotiate")]
         public static SignalRConnectionInfo GetSignalRInfo(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequest req,
             [SignalRConnectionInfo(HubName = "chatHub")] SignalRConnectionInfo connectionInfo)
@@ -21,7 +21,7 @@ namespace Squaddle.Functions.Chat
             return connectionInfo;
         }
 
-        [FunctionName("messages")]
+        [FunctionName("PostMessage")]
         public static Task SendMessage(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post")] ClientMessage clientMessage,
             [SignalR(HubName = "chatHub")] IAsyncCollector<SignalRMessage> signalRMessages)
@@ -34,7 +34,7 @@ namespace Squaddle.Functions.Chat
                 });
         }
 
-        [FunctionName("create-room")]
+        [FunctionName("CreateRoom")]
         public static string RunCreateRoom(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req
         )
