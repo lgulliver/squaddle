@@ -8,13 +8,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace Squaddle.Functions.Session
+namespace Squaddle.Functions.Chat
 {
-    public static class RoomFunctions
+    public static class Functions
     {
         [FunctionName("CreateRoom")]
-        public static string CreateRoom(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
+        public static string RunCreateRoom(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req,
             ILogger log)
         {
             log.LogInformation("Request to create a room started.");
@@ -28,11 +28,12 @@ namespace Squaddle.Functions.Session
                 stringChars[i] = chars[random.Next(chars.Length)];
             }
 
-            var finalString = new String(stringChars);
+            var finalString = new string(stringChars);
 
             log.LogInformation($"Room code {finalString} generated.");
 
             return finalString;
         }
     }
+
 }
