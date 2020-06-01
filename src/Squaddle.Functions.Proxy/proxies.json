@@ -23,7 +23,7 @@
         "matchCondition": {
           "route": "/api/create-room",
           "methods": [
-            "GET"
+            "POST"
           ]
         },
         "backendUri": "%session_api%/api/CreateRoom"

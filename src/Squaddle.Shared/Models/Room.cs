@@ -11,5 +11,6 @@ namespace Squaddle.Shared.Models
         [Required(AllowEmptyStrings = false)]
         public string Name { get; set; }
         public RoomType RoomType { get; set; }
+        public string RoomCode { get; set; }
     }
 }

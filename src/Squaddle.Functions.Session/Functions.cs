@@ -7,17 +7,28 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Squaddle.Shared.Models;
 
 namespace Squaddle.Functions.Chat
 {
     public static class Functions
     {
         [FunctionName("CreateRoom")]
-        public static string RunCreateRoom(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req,
+        public static IActionResult RunCreateRoom(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post")] Room roomDocument,
+            [CosmosDB(databaseName: "squaddle",
+            collectionName: "ActiveRooms",
+            ConnectionStringSetting = "CosmosDBConnectionString")] out Room roomDocumentToSave,
             ILogger log)
         {
             log.LogInformation("Request to create a room started.");
+
+            if(roomDocument == null)
+            {
+                log.LogError("No valid room data sent in request.");
+                roomDocumentToSave = null;
+                return new BadRequestResult();
+            }
 
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             var stringChars = new char[8];
@@ -32,8 +43,11 @@ namespace Squaddle.Functions.Chat
 
             log.LogInformation($"Room code {finalString} generated.");
 
-            return finalString;
+            roomDocument.RoomCode = finalString;
+            roomDocumentToSave = roomDocument;
+
+            return new OkObjectResult(roomDocumentToSave);
         }
-    }
+    }    
 
 }

@@ -83,11 +83,23 @@
 
     async Task CreateNewEstimationSession()
     {
-        string apiUrl = Configuration["apiBaseUrl"];
-        string newRoomCode = await _httpClient.GetStringAsync($"{apiUrl}create-room");        
-
-        newEstimationSessionViewModel.RoomCreator.RoomCode = newRoomCode;
         newEstimationSessionViewModel.RoomCreator.IsRoomOwner = true;
+
+        Room tRoom = new Room
+        {
+            Name = newEstimationSessionViewModel.Room.Name,
+            RoomType = Squaddle.Shared.Resources.RoomType.ESTIMATION
+        };
+
+        string apiUrl = Configuration["apiBaseUrl"];
+        HttpResponseMessage roomResponse = await _httpClient.PostAsJsonAsync<Room>
+            ($"{apiUrl}create-room", tRoom);
+
+        Room room = await roomResponse.Content.ReadFromJsonAsync<Room>();
+
+
+        newEstimationSessionViewModel.RoomCreator.RoomCode = room.RoomCode;
+
 
         await sessionStorage.SetItemAsync("User_Name", newEstimationSessionViewModel.RoomCreator.Name);
         await sessionStorage.SetItemAsync("User_RoomCode", newEstimationSessionViewModel.RoomCreator.RoomCode);
