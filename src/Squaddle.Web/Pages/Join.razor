@@ -10,8 +10,10 @@
     [Parameter]
     public string RoomCode { get; set; }
 
-    protected override void OnInitialized()
+    protected override void OnAfterRender(bool firstRender)
     {
+        base.OnAfterRender(firstRender);
+
         Console.WriteLine($"Room Code: {RoomCode}");
 
         if (string.IsNullOrEmpty(RoomCode))
@@ -33,13 +35,13 @@
         if (RoomCode.Length < 8 || RoomCode.Length > 8)
         {
             Console.WriteLine($"Room Code {RoomCode} is too long and invalid.");
-            NavigationManager.NavigateTo("/404");
+            NavigationManager.NavigateTo($"{NavigationManager.BaseUri}404");
         }
 
         if (!System.Text.RegularExpressions.Regex.IsMatch(RoomCode, @"^[a-zA-Z0-9]+$"))
         {
             Console.WriteLine($"Room Code {RoomCode} is invalid.");
-            NavigationManager.NavigateTo("/404");
+            NavigationManager.NavigateTo($"{NavigationManager.BaseUri}404");
         }
 
         Console.WriteLine($"Room Code: {RoomCode} is valid. Joining session...");
