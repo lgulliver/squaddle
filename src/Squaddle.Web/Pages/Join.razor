@@ -29,10 +29,12 @@
 
             Console.WriteLine($"Room Code found in local storage: {RoomCode}");
 
+
+
             JoinRoom(RoomCode);
         }
 
-        if (RoomCode.Length < 8 || RoomCode.Length > 8)
+        if (RoomCode.Length != 8)
         {
             Console.WriteLine($"Room Code {RoomCode} is too long and invalid.");
             NavigationManager.NavigateTo($"{NavigationManager.BaseUri}404");
