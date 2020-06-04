@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Squaddle.Shared.Models;
+using Microsoft.Azure.Documents.Client;
+using Microsoft.Azure.Documents.Linq;
+using System.Linq;
 
 namespace Squaddle.Functions.Chat
 {
@@ -15,9 +18,9 @@ namespace Squaddle.Functions.Chat
     {
         [FunctionName("CreateRoom")]
         public static IActionResult RunCreateRoom(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post")] Room roomDocument,
+            [HttpTrigger(AuthorizationLevel.Function, "POST")] Room roomDocument,
             [CosmosDB(databaseName: "squaddle",
-            collectionName: "ActiveRooms",
+            collectionName: "active_rooms",
             ConnectionStringSetting = "CosmosDBConnectionString")] out Room roomDocumentToSave,
             ILogger log)
         {
@@ -48,6 +51,38 @@ namespace Squaddle.Functions.Chat
 
             return new OkObjectResult(roomDocumentToSave);
         }
-    }    
+
+        [FunctionName("VerifyRoom")]
+        public static IActionResult VerifyRoom(
+            [HttpTrigger(AuthorizationLevel.Function, "GET", Route = "VerifyRoom/{id}")] HttpRequest request,
+            string id,
+            [CosmosDB(databaseName: "squaddle",
+            collectionName: "active_rooms",
+            ConnectionStringSetting = "CosmosDBConnectionString")] DocumentClient client,
+            ILogger log)
+        {
+            log.LogInformation("Request to verify a room started.");
+
+            string roomCode = id;
+            if (string.IsNullOrWhiteSpace(roomCode))
+            {
+                return new NotFoundResult();
+            }
+
+            Uri collectionUri = UriFactory.CreateDocumentCollectionUri("squaddle", "active_rooms");
+
+            log.LogInformation($"Searching for room: {roomCode}");
+
+            Room roomQuery = client.CreateDocumentQuery<Room>(collectionUri)
+                .Where(param => param.RoomCode == roomCode).Take(1).AsEnumerable().FirstOrDefault();
+
+            if (roomQuery == null)
+            {
+                return new NotFoundResult();
+            }
+
+            return new OkObjectResult(roomQuery);
+        }
+    }
 
 }

@@ -91,9 +91,9 @@
             RoomType = Squaddle.Shared.Resources.RoomType.ESTIMATION
         };
 
-        string apiUrl = Configuration["apiBaseUrl"];
+        string apiUrl = Configuration["sessionApiBaseUrl"];
         HttpResponseMessage roomResponse = await _httpClient.PostAsJsonAsync<Room>
-            ($"{apiUrl}create-room", tRoom);
+            ($"{apiUrl}create", tRoom);
 
         Room room = await roomResponse.Content.ReadFromJsonAsync<Room>();
 

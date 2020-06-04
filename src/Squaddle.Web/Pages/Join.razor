@@ -1,53 +1,55 @@
-﻿@page "/join"
+﻿@using Microsoft.Extensions.Configuration
+@using Squaddle.Shared.Models
+
+@page "/join"
 @page "/join/{roomcode}"
 
 @inject Blazored.SessionStorage.ISyncSessionStorageService sessionStorage
 @inject NavigationManager NavigationManager
+@inject IConfiguration Configuration
 
-<h3>Join session in progress</h3>
+<h3>Joining session in progress...</h3>
 
 @code {
     [Parameter]
     public string RoomCode { get; set; }
 
-    protected override void OnAfterRender(bool firstRender)
-    {
-        base.OnAfterRender(firstRender);
+    private readonly HttpClient _httpClient = new HttpClient();
 
-        Console.WriteLine($"Room Code: {RoomCode}");
+    protected async override void OnInitialized()
+    {
+        base.OnInitialized();
 
         if (string.IsNullOrEmpty(RoomCode))
         {
             Console.WriteLine("No Room Code found in URL. Checking local storage.");
-            RoomCode = sessionStorage.GetItem<string>("User_RoomCode");
+            string localRoomCode = sessionStorage.GetItem<string>("User_RoomCode");
 
-            if(string.IsNullOrEmpty(RoomCode))
+            if (string.IsNullOrEmpty(localRoomCode))
             {
                 Console.WriteLine("No Room Code found in local storage. Aborting join.");
                 NavigationManager.NavigateTo(NavigationManager.BaseUri);
+            } else
+            {
+                JoinRoom(localRoomCode);
             }
-
-            Console.WriteLine($"Room Code found in local storage: {RoomCode}");
-
-
-
-            JoinRoom(RoomCode);
         }
 
         if (RoomCode.Length != 8)
         {
-            Console.WriteLine($"Room Code {RoomCode} is too long and invalid.");
-            NavigationManager.NavigateTo($"{NavigationManager.BaseUri}404");
+            NavigationManager.NavigateTo(NavigationManager.BaseUri);
         }
 
-        if (!System.Text.RegularExpressions.Regex.IsMatch(RoomCode, @"^[a-zA-Z0-9]+$"))
+        string apiUrl = Configuration["sessionApiBaseUrl"];
+        HttpResponseMessage roomResponse = await _httpClient.GetAsync($"{apiUrl}verify/{RoomCode}");
+
+        if(roomResponse.StatusCode != System.Net.HttpStatusCode.NotFound)
         {
-            Console.WriteLine($"Room Code {RoomCode} is invalid.");
-            NavigationManager.NavigateTo($"{NavigationManager.BaseUri}404");
+            Squaddle.Shared.Models.Room room = await roomResponse.Content.ReadFromJsonAsync<Squaddle.Shared.Models.Room>();
+            JoinRoom(room.RoomCode);
         }
 
-        Console.WriteLine($"Room Code: {RoomCode} is valid. Joining session...");
-        JoinRoom(RoomCode);
+        NavigationManager.NavigateTo(NavigationManager.BaseUri);
     }
 
     void JoinRoom(string roomCode)
