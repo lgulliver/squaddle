@@ -5,14 +5,14 @@ using System.Text;
 
 namespace Squaddle.Shared.Models
 {
-    public class EstimationRoomUser : RoomUser
+    public class EstimationRoom : Room
     {
         public EstimationStyleType EstimationStyleType { get; set; }
 
-        public EstimationRoomUser()
+        public EstimationRoom()
         {
+            RoomType = RoomType.ESTIMATION;
             EstimationStyleType = EstimationStyleType.DEFAULT;
         }
     }
-
 }

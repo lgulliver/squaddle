@@ -42,6 +42,7 @@
     {
         hubConnection = new HubConnectionBuilder()
             .WithUrl(Configuration["chatApiBaseUrl"])
+            .WithAutomaticReconnect()
             .Build();
 
         hubConnection.On<ClientMessage>("clientMessage", (clientMessage) =>
@@ -50,7 +51,14 @@
             StateHasChanged();
         });
 
-        await hubConnection.StartAsync();
+        try
+        {
+            await hubConnection.StartAsync();
+            messages.Add(new ClientMessage { Name = "System", Message = $"Connected to chat with connection: {hubConnection.ConnectionId}" });
+        } catch (Exception ex)
+        {
+            messages.Add(new ClientMessage { Name = "System", Message = $"ERROR: {ex.Message}" });
+        }        
     }
 
     async Task SendAsync() {

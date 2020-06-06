@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squaddle.Functions.Proxy", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squaddle.Functions.Session", "Squaddle.Functions.Session\Squaddle.Functions.Session.csproj", "{84F3D5F0-8A93-4037-8541-DB7ACCB40EC0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Squaddle.Shared", "Squaddle.Shared\Squaddle.Shared.csproj", "{736E36BF-66B5-426A-BAC4-44F8E15AEC88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squaddle.Shared", "Squaddle.Shared\Squaddle.Shared.csproj", "{736E36BF-66B5-426A-BAC4-44F8E15AEC88}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -8,7 +8,7 @@ namespace Squaddle.Shared.Models
     public class RoomUser
     {
         [Required(AllowEmptyStrings = false)]
-        [Display(Name ="Name")]
+        [Display(Name ="Your Name")]
         [MinLength(2, ErrorMessage = "{0} is too short! It must be at least {1} characters long")]
         public string Name { get; set; }
 
