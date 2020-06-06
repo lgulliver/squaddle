@@ -36,6 +36,7 @@ You will need a minimum of the following to contribute to this project:
 - An Azure Subscription
 - An Azure SignalR Service in Serverless Mode
 - Your IDE of choice with the [appropriate extensions for Azure Function Apps ](https://docs.microsoft.com/en-us/azure/azure-functions/functions-develop-local)
+- Azure CosmosDB or Azure CosmosDB Emulator
 
 ## Squaddle.Functions.Proxy
 
