@@ -19,7 +19,7 @@
 </BSCard>
 
 <BSModal @ref="newEstimationSession" IsCentered="true">
-    <BSForm Model="@newEstimationSessionViewModel" OnValidSubmit="@CreateNewEstimationSession" @ref="newEstimationSessionForm">
+    <BSForm Model="@newEstimationSessionViewModel" OnValidSubmit="@CreateNewEstimationSession"  ValidateOnInit="true" @ref="newEstimationSessionForm">
         <BSModalHeader OnClick="@ToggleNewEstimationSessionModal">Start a new estimation session</BSModalHeader>
         <BSModalBody>
 
@@ -27,19 +27,19 @@
             <ValidationSummary />
 
             <BSFormGroup>
-                <BSLabel For="estimationUserName">Your Name</BSLabel>
-                <BSInput Id="estimationUserName" InputType="InputType.Text" PlaceHolder="Your name" @bind-Value="newEstimationSessionViewModel.RoomCreator.Name" ValidateOnChange="true" />
+                <BSLabel For="@newEstimationSessionViewModel.RoomCreator.Name">Your Name</BSLabel>
+                <BSInput Id="@newEstimationSessionViewModel.RoomCreator.Name" InputType="InputType.Text" PlaceHolder="Your name" @bind-Value="newEstimationSessionViewModel.RoomCreator.Name" ValidateOnChange="true" />
             </BSFormGroup>
 
             <BSFormGroup>
-                <BSLabel For="esitmationRoomName">Room Name</BSLabel>
-                <BSInput Id="esitmationRoomName" InputType="InputType.Text" PlaceHolder="Room name (e.g. Guardians of the Galaxy's Room)" @bind-Value="newEstimationSessionViewModel.Room.Name" ValidateOnChange="true" />
+                <BSLabel For="@newEstimationSessionViewModel.Room.Name">Room Name</BSLabel>
+                <BSInput Id="@newEstimationSessionViewModel.Room.Name" InputType="InputType.Text" PlaceHolder="Room name (e.g. Guardians of the Galaxy's Room)" @bind-Value="newEstimationSessionViewModel.Room.Name" ValidateOnChange="true" />
             </BSFormGroup>
 
         </BSModalBody>
         <BSModalFooter>
             <BSButton Color="Color.Secondary" @onclick="@ToggleNewEstimationSessionModal">Close</BSButton>
-            <BSButton Color="Color.Primary" ButtonType="ButtonType.Submit">Start</BSButton>
+            <BSButton Color="Color.Primary" ButtonType="ButtonType.Submit" OnClick="@DoValidation">Start</BSButton>
         </BSModalFooter>
     </BSForm>
 </BSModal>
@@ -69,6 +69,11 @@
     {
         newEstimationSessionViewModel.RoomCreator.IsRoomOwner = true;
         newEstimationSessionViewModel.RoomCreator.RoomCode = "ROOMCODE";
+    }
+
+    void DoValidation()
+    {
+        newEstimationSessionForm.ForceValidate();
     }
 
     void ToggleNewEstimationSessionModal(MouseEventArgs e)

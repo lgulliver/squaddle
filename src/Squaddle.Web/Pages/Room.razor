@@ -1,14 +1,30 @@
 ﻿@page "/room"
 
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage
+@inject NavigationManager NavigationManager
 
-<h3>Room: @RoomCode</h3>
+<BSContainer>
+    <BSRow>
+        <BSCol MD=9>
+            <h3>Room: @RoomCode</h3>
+        </BSCol>
+        <BSCol MD=3>
+            <BSButton Color="Color.Danger" OnClick="LeaveSession" IsBlock="true">Leave Session</BSButton>
+        </BSCol>
+    </BSRow>
+</BSContainer>
 
-@code {
+@code { 
     private string RoomCode;
 
     protected override async Task OnInitializedAsync()
     {
         RoomCode = await sessionStorage.GetItemAsync<string>("User_RoomCode");
     }
+
+    async Task LeaveSession()
+    {
+        await sessionStorage.ClearAsync();
+        NavigationManager.NavigateTo(NavigationManager.BaseUri);
+    } 
 }

@@ -8,53 +8,17 @@
 @inject NavigationManager NavigationManager
 @inject IConfiguration Configuration
 
-<h3>Joining session in progress...</h3>
+    <BSContainer>
+        <BSRow>
+            <BSCol MD=12>
+                <h3>Joining a session in progress</h3>
+
+                <JoinSessionForm RoomCode="@RoomCode"/>
+            </BSCol>
+        </BSRow>
+    </BSContainer>
 
 @code {
     [Parameter]
     public string RoomCode { get; set; }
-
-    private readonly HttpClient _httpClient = new HttpClient();
-
-    protected async override void OnInitialized()
-    {
-        base.OnInitialized();
-
-        if (string.IsNullOrEmpty(RoomCode))
-        {
-            Console.WriteLine("No Room Code found in URL. Checking local storage.");
-            string localRoomCode = sessionStorage.GetItem<string>("User_RoomCode");
-
-            if (string.IsNullOrEmpty(localRoomCode))
-            {
-                Console.WriteLine("No Room Code found in local storage. Aborting join.");
-                NavigationManager.NavigateTo(NavigationManager.BaseUri);
-            } else
-            {
-                JoinRoom(localRoomCode);
-            }
-        }
-
-        if (RoomCode.Length != 8)
-        {
-            NavigationManager.NavigateTo(NavigationManager.BaseUri);
-        }
-
-        string apiUrl = Configuration["sessionApiBaseUrl"];
-        HttpResponseMessage roomResponse = await _httpClient.GetAsync($"{apiUrl}verify/{RoomCode}");
-
-        if(roomResponse.StatusCode != System.Net.HttpStatusCode.NotFound)
-        {
-            Squaddle.Shared.Models.Room room = await roomResponse.Content.ReadFromJsonAsync<Squaddle.Shared.Models.Room>();
-            JoinRoom(room.RoomCode);
-        }
-
-        NavigationManager.NavigateTo(NavigationManager.BaseUri);
-    }
-
-    void JoinRoom(string roomCode)
-    {
-        sessionStorage.SetItem("User_RoomCode", roomCode);
-        NavigationManager.NavigateTo($"{NavigationManager.BaseUri}room");
-    }
 }

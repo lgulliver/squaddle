@@ -16,5 +16,5 @@ namespace Squaddle.Web.ViewModels
             Room = new EstimationRoom();
             RoomCreator = new RoomUser();
         }
-    }
+    }    
 }

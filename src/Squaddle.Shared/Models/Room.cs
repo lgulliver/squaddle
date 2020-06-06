@@ -8,7 +8,8 @@ namespace Squaddle.Shared.Models
 {
     public class Room
     {
-        [Required(AllowEmptyStrings = false)]
+        [Display(Name = "Room name")]
+        [Required(ErrorMessage = "{0} is a required field.", AllowEmptyStrings = false)]
         public string Name { get; set; }
         public RoomType RoomType { get; set; }
         public string RoomCode { get; set; }

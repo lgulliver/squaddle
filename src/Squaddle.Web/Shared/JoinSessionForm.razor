@@ -1,0 +1,81 @@
+﻿@using Microsoft.Extensions.Configuration
+@using Squaddle.Web.ViewModels
+
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
+@inject NavigationManager NavigationManager
+@inject IConfiguration Configuration
+
+<BSForm Model="@joinRoomViewModel" OnValidSubmit="@JoinExistingSession">
+
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <BSFormGroup>
+        <BSLabel For="@joinRoomViewModel.UserName">Your Name</BSLabel>
+        <BSInput Id="@joinRoomViewModel.UserName" InputType="InputType.Text" PlaceHolder="Your name" @bind-Value="joinRoomViewModel.UserName" />
+    </BSFormGroup>
+
+    <BSFormGroup>
+        <BSLabel For="@joinRoomViewModel.RoomCode">Room Code</BSLabel>
+        <BSInput Id="@joinRoomViewModel.RoomCode" InputType="InputType.Text" PlaceHolder="Room code (e.g. r0sE8ud1)" @bind-Value="joinRoomViewModel.RoomCode" />
+    </BSFormGroup>
+
+    <BSButton Color="Color.Primary" ButtonType="ButtonType.Submit">Join room</BSButton>
+
+</BSForm>
+
+
+@code {
+    [Parameter]
+    public string RoomCode { get; set; }
+
+    private JoinRoomViewModel joinRoomViewModel = new JoinRoomViewModel();
+    private readonly HttpClient _httpClient = new HttpClient();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (string.IsNullOrEmpty(RoomCode))
+        {
+            Console.WriteLine("No Room Code found in URL. Checking local storage.");
+            string localRoomCode = await sessionStorage.GetItemAsync<string>("User_RoomCode");
+            string localUserName = await sessionStorage.GetItemAsync<string>("User_Name");
+
+            if (string.IsNullOrEmpty(localRoomCode) || string.IsNullOrEmpty(localUserName))
+            {
+                Console.WriteLine("No Room Code found in local storage. Aborting join.");
+                if (!string.IsNullOrEmpty(localRoomCode))
+                {
+                    joinRoomViewModel.RoomCode = localRoomCode;
+                }
+            }
+            else
+            {
+                joinRoomViewModel.RoomCode = localRoomCode;
+                joinRoomViewModel.UserName = localUserName;
+                await JoinRoom(joinRoomViewModel);
+            }
+        } else
+        {
+            joinRoomViewModel.RoomCode = RoomCode;
+        }
+    }
+
+    async Task JoinExistingSession()
+    {
+        string apiUrl = Configuration["sessionApiBaseUrl"];
+        HttpResponseMessage roomResponse = await _httpClient.GetAsync($"{apiUrl}verify/{joinRoomViewModel.RoomCode}");
+
+        if (roomResponse.StatusCode != System.Net.HttpStatusCode.NotFound)
+        {
+            Squaddle.Shared.Models.Room room = await roomResponse.Content.ReadFromJsonAsync<Squaddle.Shared.Models.Room>();
+            await JoinRoom(joinRoomViewModel);
+        }
+    }
+
+    public async Task JoinRoom(JoinRoomViewModel model)
+    {
+        await sessionStorage.SetItemAsync("User_Name", model.UserName);
+        await sessionStorage.SetItemAsync("User_RoomCode", model.RoomCode);
+        NavigationManager.NavigateTo($"{NavigationManager.BaseUri}room");
+    }
+}
