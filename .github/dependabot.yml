@@ -6,6 +6,21 @@
 version: 2
 updates:
   - package-ecosystem: "nuget" # See documentation for possible values
-    directory: "/src" # Location of package manifests
+    directory: "/src/Squaddle.Web" # Location of package manifests
     schedule:
       interval: "daily"
+      
+  - package-ecosystem: "nuget" # See documentation for possible values
+    directory: "/src/Squaddle.Shared" # Location of package manifests
+    schedule:
+      interval: "daily"      
+   
+  - package-ecosystem: "nuget" # See documentation for possible values
+    directory: "/src/Squaddle.Functions.Chat" # Location of package manifests
+    schedule:
+      interval: "daily"    
+  
+  - package-ecosystem: "nuget" # See documentation for possible values
+    directory: "/src/Squaddle.Functions.Session" # Location of package manifests
+    schedule:
+      interval: "daily"    
